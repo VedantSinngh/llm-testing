@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: promptlab-backend
+    command: >
+      bash -c "python scripts/seed_db.py && uvicorn promptlab.api.main:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - PROMPTLAB_DEMO_MODE=${PROMPTLAB_DEMO_MODE:-true}
+      - PROMPTLAB_DATABASE_URL=sqlite+aiosqlite:////app/data/promptlab.db
+      - PROMPTLAB_LOG_LEVEL=${PROMPTLAB_LOG_LEVEL:-INFO}
+      - PROMPTLAB_MAX_CONCURRENCY=${PROMPTLAB_MAX_CONCURRENCY:-5}
+    volumes:
+      - promptlab_data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: promptlab-frontend
+    command: >
+      streamlit run src/promptlab/dashboard/app.py --server.port 8501 --server.address 0.0.0.0 --browser.serverAddress localhost
+    ports:
+      - "8501:8501"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      - PROMPTLAB_API_URL=http://backend:8000
+    restart: unless-stopped
+
+volumes:
+  promptlab_data:
+    name: promptlab_persistent_data

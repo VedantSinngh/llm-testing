@@ -1,0 +1,113 @@
+[
+  {
+    "name": "text_to_sql_benchmark",
+    "description": "Evaluates LLM text-to-SQL generation capabilities against an eCommerce database schema.",
+    "system_prompt": "You are a professional SQLite SQL query generator. Respond ONLY with the valid SQL SELECT query and nothing else. Do not use markdown backticks.",
+    "technique": "few_shot",
+    "technique_config": {
+      "examples": [
+        {
+          "input": "Find all users registered after 2024-01-01",
+          "output": "SELECT * FROM users WHERE created_at > '2024-01-01';"
+        }
+      ]
+    },
+    "cases": [
+      {
+        "id": "sql-01",
+        "input": "Show all active users ordered by name ascending.",
+        "expected": "SELECT id, name, email FROM users WHERE active = 1 ORDER BY name ASC;",
+        "scorer": "sql_result",
+        "scorer_config": {},
+        "tags": ["sql", "select", "ordering"]
+      },
+      {
+        "id": "sql-02",
+        "input": "Get total revenue from all completed orders.",
+        "expected": "SELECT SUM(total_amount) FROM orders WHERE status = 'completed';",
+        "scorer": "sql_result",
+        "scorer_config": {},
+        "tags": ["sql", "aggregation"]
+      },
+      {
+        "id": "sql-03",
+        "input": "Count the number of products with price greater than 50.",
+        "expected": "SELECT COUNT(*) FROM products WHERE price > 50;",
+        "scorer": "sql_result",
+        "scorer_config": {},
+        "tags": ["sql", "filter"]
+      }
+    ]
+  },
+  {
+    "name": "customer_sentiment_benchmark",
+    "description": "Tests structured JSON extraction and sentiment classification accuracy.",
+    "system_prompt": "You are a sentiment analysis engine. Return a JSON object with keys: sentiment ('positive', 'negative', 'neutral') and confidence (float between 0 and 1). Output pure JSON only.",
+    "technique": "structured_output",
+    "technique_config": {
+      "schema": "{\"sentiment\": \"positive | negative | neutral\", \"confidence\": 0.95}"
+    },
+    "cases": [
+      {
+        "id": "sent-01",
+        "input": "The shipping was incredibly fast and the packaging was spotless!",
+        "expected": "positive",
+        "scorer": "contains",
+        "scorer_config": {
+          "substring": "positive",
+          "case_sensitive": false
+        },
+        "tags": ["sentiment", "positive"]
+      },
+      {
+        "id": "sent-02",
+        "input": "Terrible battery life, shut down after two hours. Very disappointed.",
+        "expected": "negative",
+        "scorer": "contains",
+        "scorer_config": {
+          "substring": "negative",
+          "case_sensitive": false
+        },
+        "tags": ["sentiment", "negative"]
+      },
+      {
+        "id": "sent-03",
+        "input": "The package arrived on Tuesday as scheduled.",
+        "expected": null,
+        "scorer": "json_valid",
+        "scorer_config": {},
+        "tags": ["sentiment", "json_format"]
+      }
+    ]
+  },
+  {
+    "name": "math_reasoning_benchmark",
+    "description": "Multi-step arithmetic and algebraic reasoning using Chain-of-Thought prompting.",
+    "system_prompt": "Solve the problem step by step inside <thought>...</thought> tags, then state the final answer number.",
+    "technique": "chain_of_thought",
+    "technique_config": {},
+    "cases": [
+      {
+        "id": "math-01",
+        "input": "A baker bakes 24 loaves of bread in the morning and sells 18. In the afternoon, he bakes 15 more and sells 12. How many loaves remain?",
+        "expected": "9",
+        "scorer": "contains",
+        "scorer_config": {
+          "substring": "9",
+          "case_sensitive": false
+        },
+        "tags": ["arithmetic", "cot"]
+      },
+      {
+        "id": "math-02",
+        "input": "If a train travels at 60 km/h for 2.5 hours, how many kilometers does it travel in total?",
+        "expected": "150",
+        "scorer": "regex_match",
+        "scorer_config": {
+          "pattern": "(?i)\\b150\\b"
+        },
+        "tags": ["physics", "cot"]
+      }
+    ]
+  }
+]
