@@ -65,15 +65,15 @@ class ComparisonService:
         for cid in all_case_ids:
             row: dict[str, Any] = {"case_id": cid, "runs": {}}
             for r in runs:
-                cr = next((c for c in r.case_results if c.case_id == cid), None)
-                if cr:
+                matched_cr = next((c for c in r.case_results if c.case_id == cid), None)
+                if matched_cr:
                     row["runs"][r.run_id] = {
                         "model": r.model,
-                        "score": cr.score,
-                        "passed": cr.passed,
-                        "latency_ms": cr.response.latency_ms,
-                        "output_preview": cr.response.text[:150],
-                        "reason": cr.reason,
+                        "score": matched_cr.score,
+                        "passed": matched_cr.passed,
+                        "latency_ms": matched_cr.response.latency_ms,
+                        "output_preview": matched_cr.response.text[:150],
+                        "reason": matched_cr.reason,
                     }
                 else:
                     row["runs"][r.run_id] = None

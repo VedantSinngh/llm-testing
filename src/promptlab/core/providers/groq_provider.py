@@ -69,7 +69,7 @@ class GroqProvider(LLMProvider):
         """Calculate exponential backoff with full jitter to avoid thundering herds."""
         exponential = self._base_backoff_seconds * (2**attempt)
         jitter = random.uniform(0.05, 0.25)
-        return round(exponential + jitter, 3)
+        return float(round(exponential + jitter, 3))
 
     def _is_transient(self, exc: Exception) -> bool:
         """Check if an exception represents a transient failure eligible for retry."""

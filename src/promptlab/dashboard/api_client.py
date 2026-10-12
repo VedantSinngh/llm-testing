@@ -33,8 +33,8 @@ class PromptLabClient:
 
     def __init__(self, base_url: str | None = None, timeout: float = 60.0) -> None:
         """Initialize PromptLabClient with base URL from param or environment."""
-        resolved_url = base_url or os.getenv("PROMPTLAB_API_URL", "http://localhost:8000")
-        self.base_url = resolved_url.rstrip("/")
+        resolved_url = base_url or os.getenv("PROMPTLAB_API_URL") or "http://localhost:8000"
+        self.base_url: str = resolved_url.rstrip("/")
         self.timeout = timeout
         self._client = httpx.Client(base_url=self.base_url, timeout=self.timeout)
 

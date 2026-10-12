@@ -1,5 +1,7 @@
 """Unit tests for TechniqueRegistry and technique discovery."""
 
+from typing import Any
+
 import pytest
 
 from promptlab.core.techniques.base import PromptTechnique
@@ -40,7 +42,7 @@ def test_registry_decorator_custom_technique() -> None:
     class CustomScaffold(PromptTechnique):
         name: str = "custom_scaffold"
 
-        def apply(self, case_input: str, config: dict) -> tuple[str | None, str]:
+        def apply(self, case_input: str, config: dict[str, Any]) -> tuple[str | None, str]:
             return ("Custom System", f"Custom: {case_input}")
 
     assert "custom_scaffold" in TechniqueRegistry.list_techniques()
