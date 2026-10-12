@@ -25,7 +25,9 @@ async def test_llm_judge_score_async_success() -> None:
         scorer_config={"rubric": "Clarity and technical accuracy"},
     )
 
-    result = await judge.score_async(case, "Recursion is when a function calls itself until a base condition.")
+    result = await judge.score_async(
+        case, "Recursion is when a function calls itself until a base condition."
+    )
     assert result.score == 0.9
     assert result.passed is True
     assert "Accurate, well-structured explanation" in result.reason

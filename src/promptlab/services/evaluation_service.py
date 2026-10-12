@@ -5,8 +5,6 @@ the test runner, and repositories to deliver a unified interface for creating
 suites, executing runs, and persisting outcomes.
 """
 
-from typing import Any
-
 from promptlab.config import Settings, get_settings
 from promptlab.core.models import GenerationParams, RunResult, TestSuite
 from promptlab.core.providers.base import LLMProvider

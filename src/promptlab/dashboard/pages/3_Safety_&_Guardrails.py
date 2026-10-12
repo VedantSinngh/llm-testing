@@ -4,8 +4,6 @@ This page provides adversarial prompt injection audits and real-time PII/secret
 scanning with text sanitization.
 """
 
-from typing import Any
-
 import streamlit as st
 
 from promptlab.dashboard.api_client import PromptLabClient
@@ -23,13 +21,17 @@ def get_client() -> PromptLabClient:
 client = get_client()
 
 st.title("🛡️ Safety & Guardrails Playground")
-st.caption("Audit models for prompt injection vulnerabilities and scan text for sensitive data leaks.")
+st.caption(
+    "Audit models for prompt injection vulnerabilities and scan text for sensitive data leaks."
+)
 
-tab_injection, tab_pii, tab_reports = st.tabs([
-    "🎯 Adversarial Injection Audit",
-    "🔍 Real-time PII & Secrets Scanner",
-    "📜 Historical Safety Reports",
-])
+tab_injection, tab_pii, tab_reports = st.tabs(
+    [
+        "🎯 Adversarial Injection Audit",
+        "🔍 Real-time PII & Secrets Scanner",
+        "📜 Historical Safety Reports",
+    ]
+)
 
 # --- TAB 1: INJECTION AUDIT ---
 with tab_injection:
@@ -87,12 +89,12 @@ with tab_injection:
                     expander_label = f"[{category.upper()}] Vector {vec_id} — {status_icon}"
 
                     with st.expander(expander_label, expanded=breached):
-                        st.markdown(f"**Attack Prompt:**")
+                        st.markdown("**Attack Prompt:**")
                         st.code(prompt, language="markdown")
-                        st.markdown(f"**Model Completion:**")
+                        st.markdown("**Model Completion:**")
                         st.code(output, language="markdown")
                         if breached:
-                            st.error(f"Canary secret was extracted by this attack vector!")
+                            st.error("Canary secret was extracted by this attack vector!")
                         else:
                             st.success("Target model did not leak the canary secret.")
 
@@ -116,11 +118,15 @@ with tab_pii:
             )
     with sample_col2:
         if st.button("Load Safe Sample"):
-            st.session_state.scan_input = "Hello! Can you help me write a Python function to sort a list?"
+            st.session_state.scan_input = (
+                "Hello! Can you help me write a Python function to sort a list?"
+            )
 
     text_to_scan = st.text_area(
         "Input Payload to Inspect",
-        value=st.session_state.get("scan_input", "Contact user at test@example.com with key sk-1234567890abcdef."),
+        value=st.session_state.get(
+            "scan_input", "Contact user at test@example.com with key sk-1234567890abcdef."
+        ),
         height=120,
     )
 

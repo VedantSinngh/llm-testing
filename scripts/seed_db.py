@@ -44,7 +44,9 @@ async def seed() -> None:
         safety_repo = SafetyRepository(session)
 
         settings = get_settings()
-        eval_service = EvaluationService(suite_repo=suite_repo, run_repo=run_repo, settings=settings)
+        eval_service = EvaluationService(
+            suite_repo=suite_repo, run_repo=run_repo, settings=settings
+        )
         safety_service = SafetyService(safety_repo=safety_repo, settings=settings)
 
         seeded_suite_ids: list[str] = []
@@ -52,7 +54,9 @@ async def seed() -> None:
             suite_obj = TestSuite(**suite_dict)
             existing = await suite_repo.get_by_name(suite_obj.name)
             if existing:
-                logger.info("Suite '%s' already exists (ID: %s). Skipping.", suite_obj.name, existing[0])
+                logger.info(
+                    "Suite '%s' already exists (ID: %s). Skipping.", suite_obj.name, existing[0]
+                )
                 seeded_suite_ids.append(existing[0])
             else:
                 suite_id = await suite_repo.save(suite_obj)
@@ -70,7 +74,9 @@ async def seed() -> None:
                 model="mock-llama-3.3-70b",
                 params=GenerationParams(temperature=0.2, max_tokens=256),
             )
-            logger.info("Executed baseline run 1: %s (Pass rate: %.1f%%)", run1.model, run1.pass_rate * 100)
+            logger.info(
+                "Executed baseline run 1: %s (Pass rate: %.1f%%)", run1.model, run1.pass_rate * 100
+            )
 
             # Model 2 Run: mock-qwen-2.5-72b
             run2 = await eval_service.execute_run(
@@ -78,7 +84,9 @@ async def seed() -> None:
                 model="mock-qwen-2.5-72b",
                 params=GenerationParams(temperature=0.7, max_tokens=256),
             )
-            logger.info("Executed baseline run 2: %s (Pass rate: %.1f%%)", run2.model, run2.pass_rate * 100)
+            logger.info(
+                "Executed baseline run 2: %s (Pass rate: %.1f%%)", run2.model, run2.pass_rate * 100
+            )
 
             # Seed baseline safety report
             logger.info("Executing baseline adversarial injection audit...")

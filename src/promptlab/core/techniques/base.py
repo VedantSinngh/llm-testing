@@ -17,9 +17,7 @@ class PromptTechnique(ABC):
     name: str
 
     @abstractmethod
-    def apply(
-        self, case_input: str, config: dict[str, Any]
-    ) -> tuple[str | None, str]:
+    def apply(self, case_input: str, config: dict[str, Any]) -> tuple[str | None, str]:
         """Transform test case input and configuration into prompt components.
 
         Args:

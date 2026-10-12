@@ -57,7 +57,13 @@ select = [
     "B",   # flake8-bugbear
     "SIM", # flake8-simplify
 ]
-ignore = ["E501", "I001"]  # line length handled by formatter, ignore import sort failures
+ignore = [
+    "E501",   # line length handled by formatter
+    "I001",   # import sorting handled by formatter
+    "B008",   # FastAPI Depends() in argument defaults
+    "B007",   # loop control variable not used
+    "SIM103", # return condition directly
+]
 
 [tool.mypy]
 python_version = "3.11"

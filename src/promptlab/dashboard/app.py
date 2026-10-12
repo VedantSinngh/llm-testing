@@ -133,7 +133,10 @@ with col_stat3:
     st.markdown('<div class="metric-card">', unsafe_allow_html=True)
     st.markdown('<div class="metric-title">Demo Mode</div>', unsafe_allow_html=True)
     demo_status = "ENABLED (Mock)" if health.get("demo_mode", True) else "DISABLED (Live Groq)"
-    st.markdown(f'<div class="metric-value" style="font-size: 1.3rem;">{demo_status}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="metric-value" style="font-size: 1.3rem;">{demo_status}</div>',
+        unsafe_allow_html=True,
+    )
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col_stat4:
@@ -221,7 +224,9 @@ with col_m2:
 st.divider()
 
 # Architecture & Interview Explanation Callout
-with st.expander("🎓 Architecture & Interview Design Highlights (How to explain PromptLab)", expanded=False):
+with st.expander(
+    "🎓 Architecture & Interview Design Highlights (How to explain PromptLab)", expanded=False
+):
     st.markdown(
         """
         - **Decoupled Architecture:** Pure domain core (`core/`) contains zero framework dependencies.

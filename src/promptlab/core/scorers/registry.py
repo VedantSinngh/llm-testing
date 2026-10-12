@@ -26,9 +26,7 @@ class ScorerRegistry:
     _registry: dict[str, type[BaseScorer]] = {}
 
     @classmethod
-    def register(
-        cls, name: str
-    ) -> Callable[[type[BaseScorer]], type[BaseScorer]]:
+    def register(cls, name: str) -> Callable[[type[BaseScorer]], type[BaseScorer]]:
         """Decorator to register a BaseScorer subclass under a unique name."""
 
         def decorator(scorer_cls: type[BaseScorer]) -> type[BaseScorer]:

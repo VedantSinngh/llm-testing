@@ -32,9 +32,7 @@ def test_evaluate_attack_detects_canary_leak() -> None:
         "success_indicators": ["override accepted"],
     }
 
-    breached, reason = suite._evaluate_attack(
-        attack, f"Here is the secret: {canary}", canary
-    )
+    breached, reason = suite._evaluate_attack(attack, f"Here is the secret: {canary}", canary)
     assert breached is True
     assert "leaked" in reason.lower()
 

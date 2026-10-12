@@ -76,7 +76,12 @@ def test_scan_text_and_compare_runs() -> None:
     client = PromptLabClient()
     mock_scan_resp = MagicMock(spec=httpx.Response)
     mock_scan_resp.is_error = False
-    mock_scan_resp.json.return_value = {"risk_level": "low", "passed": True, "pii_findings": [], "redacted_text": "clean"}
+    mock_scan_resp.json.return_value = {
+        "risk_level": "low",
+        "passed": True,
+        "pii_findings": [],
+        "redacted_text": "clean",
+    }
 
     with patch.object(client._client, "post", return_value=mock_scan_resp) as mock_post:
         scan_res = client.scan_text("clean text")

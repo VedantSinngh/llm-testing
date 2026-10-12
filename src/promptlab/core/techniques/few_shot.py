@@ -15,9 +15,7 @@ class FewShot(PromptTechnique):
 
     name: str = "few_shot"
 
-    def apply(
-        self, case_input: str, config: dict[str, Any]
-    ) -> tuple[str | None, str]:
+    def apply(self, case_input: str, config: dict[str, Any]) -> tuple[str | None, str]:
         """Format demonstration examples and append the current case query.
 
         Args:

@@ -5,7 +5,7 @@ avoiding repetitive setup code in individual tests.
 """
 
 from collections.abc import AsyncGenerator, Generator
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -132,9 +132,7 @@ def sample_case_result(sample_response: LLMResponse) -> CaseResult:
 
 
 @pytest.fixture
-def sample_run_result(
-    sample_params: GenerationParams, sample_case_result: CaseResult
-) -> RunResult:
+def sample_run_result(sample_params: GenerationParams, sample_case_result: CaseResult) -> RunResult:
     """Fixture providing an aggregated run result."""
     return RunResult(
         run_id="run-test-uuid-1234",
@@ -146,7 +144,7 @@ def sample_run_result(
         pass_rate=1.0,
         avg_latency_ms=145.2,
         total_tokens=43,
-        created_at=datetime.now(timezone.utc),
+        created_at=datetime.now(UTC),
     )
 
 
@@ -178,4 +176,3 @@ async def async_db_session() -> AsyncGenerator["AsyncSession", None]:
         yield session
 
     await engine.dispose()
-

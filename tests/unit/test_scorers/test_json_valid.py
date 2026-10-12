@@ -17,7 +17,7 @@ def test_json_valid_with_markdown_fences() -> None:
     """Verify markdown code fences are stripped before parsing."""
     scorer = JsonValid()
     case = TestCase(id="jv-2", input="Output json", scorer="json_valid")
-    raw = "```json\n{\n  \"items\": [1, 2, 3]\n}\n```"
+    raw = '```json\n{\n  "items": [1, 2, 3]\n}\n```'
     result = scorer.score(case, raw)
     assert result.score == 1.0
     assert result.passed is True

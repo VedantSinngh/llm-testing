@@ -26,9 +26,7 @@ class Guardrail:
             return "low"
 
         # Check for critical high-severity categories: API keys and Credit Cards
-        has_critical = any(
-            f.get("type") in {"api_key", "credit_card"} for f in pii_findings
-        )
+        has_critical = any(f.get("type") in {"api_key", "credit_card"} for f in pii_findings)
         if has_critical or len(pii_findings) >= 3:
             return "high"
 
@@ -48,9 +46,7 @@ class Guardrail:
             passed=passed,
         )
 
-    def filter_text(
-        self, text: str, redact: bool = True
-    ) -> tuple[bool, str, SafetyReport]:
+    def filter_text(self, text: str, redact: bool = True) -> tuple[bool, str, SafetyReport]:
         """Filter text and return whether it passed, the sanitized text, and the report.
 
         Args:

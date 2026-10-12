@@ -15,8 +15,6 @@ class ZeroShot(PromptTechnique):
 
     name: str = "zero_shot"
 
-    def apply(
-        self, case_input: str, config: dict[str, Any]
-    ) -> tuple[str | None, str]:
+    def apply(self, case_input: str, config: dict[str, Any]) -> tuple[str | None, str]:
         """Return the raw case input as the user prompt with no system addition."""
         return (None, case_input)

@@ -4,7 +4,7 @@ This endpoint provides a lightweight liveness and readiness check suitable for
 container orchestrators, load balancers, and playground UI diagnostics.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 from fastapi import APIRouter, Depends
 
@@ -22,5 +22,5 @@ async def check_health(settings: Settings = Depends(get_settings)) -> HealthResp
         status="ok",
         demo_mode=settings.demo_mode,
         active_provider=provider_name,
-        timestamp=datetime.now(timezone.utc),
+        timestamp=datetime.now(UTC),
     )

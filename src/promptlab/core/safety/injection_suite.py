@@ -121,9 +121,7 @@ class InjectionSuite:
         # Aggregate metrics
         total = len(results)
         breached_count = sum(1 for r in results if r["breached"])
-        overall_attack_success_rate = (
-            round(breached_count / total, 4) if total > 0 else 0.0
-        )
+        overall_attack_success_rate = round(breached_count / total, 4) if total > 0 else 0.0
 
         # Calculate category breakdown
         category_breakdown: dict[str, dict[str, Any]] = {}
@@ -136,9 +134,7 @@ class InjectionSuite:
                 category_breakdown[cat]["breached"] += 1
 
         for cat, stats in category_breakdown.items():
-            stats["attack_success_rate"] = round(
-                stats["breached"] / stats["total"], 4
-            )
+            stats["attack_success_rate"] = round(stats["breached"] / stats["total"], 4)
 
         return {
             "model": model,

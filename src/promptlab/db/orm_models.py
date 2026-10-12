@@ -7,7 +7,7 @@ This module maps PromptLab domain entities to relational database tables:
 - `SafetyReportModel` (`safety_reports`): Vulnerability and PII audit logs.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any
 import uuid
 
@@ -22,9 +22,7 @@ class SuiteModel(Base):
 
     __tablename__ = "suites"
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     name: Mapped[str] = mapped_column(String(128), unique=True, index=True, nullable=False)
     description: Mapped[str] = mapped_column(Text, default="", nullable=False)
     system_prompt: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -33,7 +31,7 @@ class SuiteModel(Base):
     cases: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
         nullable=False,
     )
 
@@ -61,7 +59,7 @@ class RunModel(Base):
     total_tokens: Mapped[int] = mapped_column(Integer, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
         index=True,
         nullable=False,
     )
@@ -72,9 +70,7 @@ class RunModel(Base):
         "CaseResultModel", back_populates="run", cascade="all, delete-orphan"
     )
 
-    __table_args__ = (
-        Index("ix_runs_suite_created", "suite_name", "created_at"),
-    )
+    __table_args__ = (Index("ix_runs_suite_created", "suite_name", "created_at"),)
 
 
 class CaseResultModel(Base):
@@ -82,9 +78,7 @@ class CaseResultModel(Base):
 
     __tablename__ = "case_results"
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     run_id: Mapped[str] = mapped_column(
         String(36), ForeignKey("runs.id", ondelete="CASCADE"), index=True, nullable=False
     )
@@ -108,17 +102,17 @@ class SafetyReportModel(Base):
 
     __tablename__ = "safety_reports"
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     model: Mapped[str] = mapped_column(String(128), nullable=False)
     risk_level: Mapped[str] = mapped_column(String(32), nullable=False)
     passed: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    injection_results: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list, nullable=False)
+    injection_results: Mapped[list[dict[str, Any]]] = mapped_column(
+        JSON, default=list, nullable=False
+    )
     pii_findings: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
         index=True,
         nullable=False,
     )

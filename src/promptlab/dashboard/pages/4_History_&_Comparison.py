@@ -7,8 +7,6 @@ This page provides:
 - Historical run browsing and inspection.
 """
 
-from typing import Any
-
 import streamlit as st
 
 from promptlab.dashboard.api_client import PromptLabClient
@@ -38,10 +36,14 @@ with tab_compare:
     all_runs = runs_data.get("items", [])
 
     if len(all_runs) < 2:
-        st.info("At least 2 evaluation runs are required for side-by-side comparison. Execute runs in 'Playground' or 'Test Suites' first.")
+        st.info(
+            "At least 2 evaluation runs are required for side-by-side comparison. Execute runs in 'Playground' or 'Test Suites' first."
+        )
     else:
         run_options = {
-            f"[{r.get('model')}] Suite: {r.get('suite_name')} — Pass Rate: {r.get('pass_rate', 0)*100:.0f}% (ID: {r.get('run_id')[:8]}...)": r.get("run_id")
+            f"[{r.get('model')}] Suite: {r.get('suite_name')} — Pass Rate: {r.get('pass_rate', 0) * 100:.0f}% (ID: {r.get('run_id')[:8]}...)": r.get(
+                "run_id"
+            )
             for r in all_runs
         }
 
@@ -79,7 +81,7 @@ with tab_compare:
                                     "Model": s.get("model"),
                                     "Suite": s.get("suite_name"),
                                     "Technique": s.get("technique"),
-                                    "Pass Rate": f"{s.get('pass_rate', 0)*100:.1f}%",
+                                    "Pass Rate": f"{s.get('pass_rate', 0) * 100:.1f}%",
                                     "Avg Latency (ms)": f"{s.get('avg_latency_ms', 0):.1f}",
                                     "Total Tokens": s.get("total_tokens", 0),
                                     "Temp": s.get("temperature"),
@@ -134,7 +136,9 @@ with tab_browse:
 
     filtered_runs = all_runs
     if filter_model.strip():
-        filtered_runs = [r for r in all_runs if filter_model.lower() in str(r.get("model", "")).lower()]
+        filtered_runs = [
+            r for r in all_runs if filter_model.lower() in str(r.get("model", "")).lower()
+        ]
 
     if not filtered_runs:
         st.info("No matching runs found.")
@@ -147,7 +151,9 @@ with tab_browse:
             avg_lat = r.get("avg_latency_ms", 0.0)
             tokens = r.get("total_tokens", 0)
 
-            with st.expander(f"[{rmodel}] {sname} — Pass Rate: {pass_rate:.1f}% — {avg_lat:.1f}ms (ID: {rid[:8]}...)"):
+            with st.expander(
+                f"[{rmodel}] {sname} — Pass Rate: {pass_rate:.1f}% — {avg_lat:.1f}ms (ID: {rid[:8]}...)"
+            ):
                 st.write(f"Technique: `{r.get('technique')}` | Tokens: `{tokens}`")
                 case_results = r.get("case_results", [])
                 st.write(f"Evaluated Cases: {len(case_results)}")
@@ -157,4 +163,6 @@ with tab_browse:
                     score = cr.get("score", 0.0)
                     resp = cr.get("response", {})
                     badge = "✅" if passed else "❌"
-                    st.markdown(f"- {badge} **{cid}** (Score: {score:.2f}): `{resp.get('text', '')[:100]}...`")
+                    st.markdown(
+                        f"- {badge} **{cid}** (Score: {score:.2f}): `{resp.get('text', '')[:100]}...`"
+                    )

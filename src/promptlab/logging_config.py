@@ -7,7 +7,7 @@ This module provides production-grade structured logging with:
 """
 
 from contextvars import ContextVar
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 import json
 import logging
 import re
@@ -60,7 +60,7 @@ class JSONLogFormatter(logging.Formatter):
         masked_message = mask_sensitive_value(log_message)
 
         payload: dict[str, Any] = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "level": record.levelname,
             "logger": record.name,
             "message": masked_message,

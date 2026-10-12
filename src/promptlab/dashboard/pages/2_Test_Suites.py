@@ -5,7 +5,6 @@ with automated rubric scoring and aggregate metrics.
 """
 
 import json
-from typing import Any
 
 import streamlit as st
 
@@ -26,7 +25,9 @@ client = get_client()
 st.title("📋 Evaluation Test Suites")
 st.caption("Manage test cases, run automated evaluations against LLMs, and track regressions.")
 
-tab_run, tab_create, tab_manage = st.tabs(["🚀 Run Suite", "➕ Create Suite", "⚙️ Manage Existing Suites"])
+tab_run, tab_create, tab_manage = st.tabs(
+    ["🚀 Run Suite", "➕ Create Suite", "⚙️ Manage Existing Suites"]
+)
 
 # --- TAB 1: RUN SUITE ---
 with tab_run:
@@ -37,7 +38,9 @@ with tab_run:
     suite_items = suites_data.get("items", [])
 
     if not suite_items:
-        st.info("No test suites found in the database. Create a suite in the 'Create Suite' tab or run a demo.")
+        st.info(
+            "No test suites found in the database. Create a suite in the 'Create Suite' tab or run a demo."
+        )
     else:
         suite_map = {f"{s['suite']['name']} ({s['id'][:8]}...)": s for s in suite_items}
         selected_suite_label = st.selectbox("Select Test Suite", list(suite_map.keys()))
@@ -53,7 +56,9 @@ with tab_run:
             run_tokens = st.slider("Max Tokens", 32, 2048, 256, 32, key="run_tokens")
 
         if st.button("🚀 Execute Suite Run", type="primary", use_container_width=True):
-            with st.spinner(f"Evaluating {len(selected_suite['suite']['cases'])} cases on {target_model}..."):
+            with st.spinner(
+                f"Evaluating {len(selected_suite['suite']['cases'])} cases on {target_model}..."
+            ):
                 try:
                     run_payload = {
                         "suite_id": selected_suite["id"],
@@ -104,9 +109,15 @@ with tab_create:
 
     with st.form("create_suite_form"):
         suite_name = st.text_input("Suite Name", value="customer_service_eval")
-        suite_desc = st.text_area("Description", value="Evaluation suite testing intent recognition and formatting.")
-        suite_sys = st.text_input("System Prompt", value="You are a helpful customer service assistant.")
-        suite_technique = st.selectbox("Prompt Technique", ["zero_shot", "few_shot", "chain_of_thought", "structured_output"])
+        suite_desc = st.text_area(
+            "Description", value="Evaluation suite testing intent recognition and formatting."
+        )
+        suite_sys = st.text_input(
+            "System Prompt", value="You are a helpful customer service assistant."
+        )
+        suite_technique = st.selectbox(
+            "Prompt Technique", ["zero_shot", "few_shot", "chain_of_thought", "structured_output"]
+        )
 
         st.subheader("Test Cases (JSON format)")
         default_cases = [

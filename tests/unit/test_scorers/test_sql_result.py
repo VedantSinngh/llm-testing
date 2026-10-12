@@ -15,7 +15,9 @@ def test_sql_result_valid_match() -> None:
             "expected_sql": "SELECT id, name FROM products WHERE category = 'Electronics' ORDER BY id;"
         },
     )
-    candidate_sql = "```sql\nSELECT id, name FROM products WHERE category = 'Electronics' ORDER BY id;\n```"
+    candidate_sql = (
+        "```sql\nSELECT id, name FROM products WHERE category = 'Electronics' ORDER BY id;\n```"
+    )
     result = scorer.score(case, candidate_sql)
 
     assert result.score == 1.0
@@ -82,7 +84,10 @@ def test_sql_security_block_insert_statement() -> None:
         scorer="sql_result",
         scorer_config={"expected_sql": "SELECT * FROM customers;"},
     )
-    result = scorer.score(case, "INSERT INTO customers (id, name, email, country) VALUES (99, 'Hacker', 'h@h.com', 'X');")
+    result = scorer.score(
+        case,
+        "INSERT INTO customers (id, name, email, country) VALUES (99, 'Hacker', 'h@h.com', 'X');",
+    )
     assert result.score == 0.0
     assert result.passed is False
     assert "Security Violation" in result.reason

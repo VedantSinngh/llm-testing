@@ -81,57 +81,67 @@ class PIIDetector:
 
         # 1. API Keys
         for match in self.GROQ_KEY_PATTERN.finditer(text):
-            findings.append({
-                "type": "api_key",
-                "category": "SECRET",
-                "detector": "pii_groq_api_key",
-                "snippet": "gsk_***[REDACTED]",
-                "start": match.start(),
-                "end": match.end(),
-            })
+            findings.append(
+                {
+                    "type": "api_key",
+                    "category": "SECRET",
+                    "detector": "pii_groq_api_key",
+                    "snippet": "gsk_***[REDACTED]",
+                    "start": match.start(),
+                    "end": match.end(),
+                }
+            )
         for match in self.OPENAI_KEY_PATTERN.finditer(text):
-            findings.append({
-                "type": "api_key",
-                "category": "SECRET",
-                "detector": "pii_openai_api_key",
-                "snippet": "sk-***[REDACTED]",
-                "start": match.start(),
-                "end": match.end(),
-            })
+            findings.append(
+                {
+                    "type": "api_key",
+                    "category": "SECRET",
+                    "detector": "pii_openai_api_key",
+                    "snippet": "sk-***[REDACTED]",
+                    "start": match.start(),
+                    "end": match.end(),
+                }
+            )
         for match in self.AWS_KEY_PATTERN.finditer(text):
-            findings.append({
-                "type": "api_key",
-                "category": "SECRET",
-                "detector": "pii_aws_key",
-                "snippet": "AKIA***[REDACTED]",
-                "start": match.start(),
-                "end": match.end(),
-            })
+            findings.append(
+                {
+                    "type": "api_key",
+                    "category": "SECRET",
+                    "detector": "pii_aws_key",
+                    "snippet": "AKIA***[REDACTED]",
+                    "start": match.start(),
+                    "end": match.end(),
+                }
+            )
 
         # 2. Credit Cards with Luhn check
         for match in self.CREDIT_CARD_PATTERN.finditer(text):
             raw = match.group(0)
             if validate_luhn(raw):
-                findings.append({
-                    "type": "credit_card",
-                    "category": "FINANCIAL",
-                    "detector": "pii_credit_card",
-                    "snippet": self._mask_card(raw),
-                    "start": match.start(),
-                    "end": match.end(),
-                })
+                findings.append(
+                    {
+                        "type": "credit_card",
+                        "category": "FINANCIAL",
+                        "detector": "pii_credit_card",
+                        "snippet": self._mask_card(raw),
+                        "start": match.start(),
+                        "end": match.end(),
+                    }
+                )
 
         # 3. Emails
         for match in self.EMAIL_PATTERN.finditer(text):
             raw = match.group(0)
-            findings.append({
-                "type": "email",
-                "category": "PII",
-                "detector": "pii_email",
-                "snippet": self._mask_email(raw),
-                "start": match.start(),
-                "end": match.end(),
-            })
+            findings.append(
+                {
+                    "type": "email",
+                    "category": "PII",
+                    "detector": "pii_email",
+                    "snippet": self._mask_email(raw),
+                    "start": match.start(),
+                    "end": match.end(),
+                }
+            )
 
         # 4. Phone Numbers (Indian and International)
         for pattern, detector_name in [
@@ -140,26 +150,30 @@ class PIIDetector:
         ]:
             for match in pattern.finditer(text):
                 raw = match.group(0)
-                findings.append({
-                    "type": "phone",
-                    "category": "PII",
-                    "detector": detector_name,
-                    "snippet": self._mask_phone(raw),
-                    "start": match.start(),
-                    "end": match.end(),
-                })
+                findings.append(
+                    {
+                        "type": "phone",
+                        "category": "PII",
+                        "detector": detector_name,
+                        "snippet": self._mask_phone(raw),
+                        "start": match.start(),
+                        "end": match.end(),
+                    }
+                )
 
         # 5. IPv4
         for match in self.IPV4_PATTERN.finditer(text):
             raw = match.group(0)
-            findings.append({
-                "type": "ipv4",
-                "category": "NETWORK",
-                "detector": "pii_ipv4",
-                "snippet": self._mask_ipv4(raw),
-                "start": match.start(),
-                "end": match.end(),
-            })
+            findings.append(
+                {
+                    "type": "ipv4",
+                    "category": "NETWORK",
+                    "detector": "pii_ipv4",
+                    "snippet": self._mask_ipv4(raw),
+                    "start": match.start(),
+                    "end": match.end(),
+                }
+            )
 
         return findings
 

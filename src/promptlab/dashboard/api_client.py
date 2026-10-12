@@ -5,7 +5,7 @@ evaluation endpoints, trigger runs, and inspect safety reports. It encapsulates
 connection retries, timeouts, and error normalization.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 import os
 from typing import Any
 
@@ -17,7 +17,9 @@ from promptlab.exceptions import PromptLabError
 class APIClientError(PromptLabError):
     """Raised when the backend API returns an error or is unreachable."""
 
-    def __init__(self, message: str, status_code: int = 502, details: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self, message: str, status_code: int = 502, details: dict[str, Any] | None = None
+    ) -> None:
         super().__init__(
             message=message,
             error_code="API_CLIENT_ERROR",
@@ -45,7 +47,9 @@ class PromptLabClient:
 
         if response.is_error:
             msg = payload.get("message", f"HTTP {response.status_code} error from API server.")
-            raise APIClientError(message=str(msg), status_code=response.status_code, details=payload)
+            raise APIClientError(
+                message=str(msg), status_code=response.status_code, details=payload
+            )
 
         return payload
 
@@ -60,7 +64,7 @@ class PromptLabClient:
                 "demo_mode": True,
                 "active_provider": "offline",
                 "error": str(exc),
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             }
 
     def list_models(self, provider: str | None = None) -> list[str]:

@@ -15,7 +15,9 @@ router = APIRouter(tags=["Models"])
 
 @router.get("/models", response_model=ModelsResponse)
 async def list_models(
-    provider: str | None = Query(default=None, description="Optional provider identifier override."),
+    provider: str | None = Query(
+        default=None, description="Optional provider identifier override."
+    ),
     settings: Settings = Depends(get_settings),
 ) -> ModelsResponse:
     """Return catalog of model IDs supported by the active or requested provider."""

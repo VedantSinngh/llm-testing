@@ -9,7 +9,6 @@ non-SELECT statements or destructive keywords is blocked, raising SecurityError.
 from pathlib import Path
 import re
 import sqlite3
-from typing import Any
 
 from promptlab.core.models import ScoreResult, TestCase
 from promptlab.core.scorers.base import BaseScorer
@@ -109,7 +108,9 @@ class SqlResult(BaseScorer):
                 metadata={"security_violation": True, "error": sec_err.message},
             )
 
-        expected_sql = self._extract_sql(case.scorer_config.get("expected_sql") or case.expected or "")
+        expected_sql = self._extract_sql(
+            case.scorer_config.get("expected_sql") or case.expected or ""
+        )
         if not expected_sql:
             return ScoreResult(
                 score=0.0,

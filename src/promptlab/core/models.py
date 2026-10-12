@@ -6,7 +6,7 @@ test cases, evaluation results, and safety findings. They are framework-agnostic
 and enforce strict validation and type safety.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any, Literal
 import uuid
 
@@ -264,7 +264,7 @@ class RunResult(BaseModel):
         description="Total tokens consumed across all cases.",
     )
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+        default_factory=lambda: datetime.now(UTC),
         description="UTC timestamp when run was executed.",
     )
 

@@ -6,7 +6,6 @@ can be introduced without altering existing execution pipelines.
 """
 
 from collections.abc import Callable
-from typing import Any
 
 from promptlab.core.techniques.base import PromptTechnique
 from promptlab.core.techniques.chain_of_thought import ChainOfThought
@@ -23,9 +22,7 @@ class TechniqueRegistry:
     _registry: dict[str, type[PromptTechnique]] = {}
 
     @classmethod
-    def register(
-        cls, name: str
-    ) -> Callable[[type[PromptTechnique]], type[PromptTechnique]]:
+    def register(cls, name: str) -> Callable[[type[PromptTechnique]], type[PromptTechnique]]:
         """Decorator to register a PromptTechnique subclass under a unique name."""
 
         def decorator(technique_cls: type[PromptTechnique]) -> type[PromptTechnique]:
@@ -35,9 +32,7 @@ class TechniqueRegistry:
         return decorator
 
     @classmethod
-    def register_technique(
-        cls, name: str, technique_cls: type[PromptTechnique]
-    ) -> None:
+    def register_technique(cls, name: str, technique_cls: type[PromptTechnique]) -> None:
         """Register a PromptTechnique subclass directly."""
         cls._registry[name.lower()] = technique_cls
 

@@ -7,9 +7,8 @@ captured gracefully, guaranteeing that a single case failure does not abort an e
 """
 
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 import logging
-from typing import Any
 
 from promptlab.config import Settings, get_settings
 from promptlab.core.models import (
@@ -53,9 +52,7 @@ class TestRunner:
         """Resolve technique instance dynamically."""
         return TechniqueRegistry.get(technique_name)
 
-    def _combine_system_prompts(
-        self, base_system: str | None, addition: str | None
-    ) -> str | None:
+    def _combine_system_prompts(self, base_system: str | None, addition: str | None) -> str | None:
         """Merge suite system instructions with technique-specific guidance."""
         if base_system and addition:
             return f"{base_system}\n\n{addition}"
@@ -77,12 +74,8 @@ class TestRunner:
                 else self._technique
             )
 
-            sys_addition, user_prompt = technique.apply(
-                case.input, suite.technique_config
-            )
-            combined_system = self._combine_system_prompts(
-                suite.system_prompt, sys_addition
-            )
+            sys_addition, user_prompt = technique.apply(case.input, suite.technique_config)
+            combined_system = self._combine_system_prompts(suite.system_prompt, sys_addition)
 
             request = LLMRequest(
                 model=model,
@@ -154,8 +147,7 @@ class TestRunner:
         avg_latency = round(total_latency / total_cases, 2) if total_cases > 0 else 0.0
 
         total_tokens = sum(
-            cr.response.prompt_tokens + cr.response.completion_tokens
-            for cr in case_results
+            cr.response.prompt_tokens + cr.response.completion_tokens for cr in case_results
         )
 
         return RunResult(
@@ -167,7 +159,7 @@ class TestRunner:
             pass_rate=pass_rate,
             avg_latency_ms=avg_latency,
             total_tokens=total_tokens,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
 
     async def run_matrix(

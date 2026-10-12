@@ -21,7 +21,9 @@ class HealthResponse(BaseModel):
     """Health status and active environment configuration."""
 
     status: str = Field(default="ok", description="Application operational status.")
-    demo_mode: bool = Field(..., description="Whether system is running in zero-credential demo mode.")
+    demo_mode: bool = Field(
+        ..., description="Whether system is running in zero-credential demo mode."
+    )
     active_provider: str = Field(..., description="Configured inference provider.")
     timestamp: datetime = Field(..., description="Server timestamp.")
 
@@ -40,7 +42,9 @@ class SuiteCreateRequest(BaseModel):
     description: str = Field(default="", description="Suite purpose description.")
     system_prompt: str | None = Field(default=None, description="Shared system instruction.")
     technique: str = Field(default="zero_shot", description="Prompting strategy.")
-    technique_config: dict[str, Any] = Field(default_factory=dict, description="Technique configuration.")
+    technique_config: dict[str, Any] = Field(
+        default_factory=dict, description="Technique configuration."
+    )
     cases: list[TestCase] = Field(..., min_length=1, description="Test cases to evaluate.")
 
     def to_test_suite(self) -> TestSuite:
@@ -151,4 +155,6 @@ class ErrorResponse(BaseModel):
     error_code: str = Field(..., description="Machine-readable error identifier.")
     message: str = Field(..., description="Human-readable error explanation.")
     request_id: str = Field(default="", description="Correlated trace request ID.")
-    details: dict[str, Any] = Field(default_factory=dict, description="Supplementary contextual details.")
+    details: dict[str, Any] = Field(
+        default_factory=dict, description="Supplementary contextual details."
+    )

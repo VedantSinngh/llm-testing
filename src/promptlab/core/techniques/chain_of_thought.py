@@ -17,9 +17,7 @@ class ChainOfThought(PromptTechnique):
 
     name: str = "chain_of_thought"
 
-    def apply(
-        self, case_input: str, config: dict[str, Any]
-    ) -> tuple[str | None, str]:
+    def apply(self, case_input: str, config: dict[str, Any]) -> tuple[str | None, str]:
         """Apply step-by-step reasoning instructions and delimiter requirements."""
         system_addition = (
             "Think step-by-step before answering. Break down the problem logically. "

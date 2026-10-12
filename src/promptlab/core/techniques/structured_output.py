@@ -17,15 +17,11 @@ class StructuredOutput(PromptTechnique):
 
     name: str = "structured_output"
 
-    def apply(
-        self, case_input: str, config: dict[str, Any]
-    ) -> tuple[str | None, str]:
+    def apply(self, case_input: str, config: dict[str, Any]) -> tuple[str | None, str]:
         """Inject JSON schema constraints into the system and user prompts."""
         schema = config.get("schema")
         schema_repr = (
-            json.dumps(schema, indent=2)
-            if isinstance(schema, dict)
-            else str(schema or "{}")
+            json.dumps(schema, indent=2) if isinstance(schema, dict) else str(schema or "{}")
         )
 
         system_addition = (
@@ -34,8 +30,7 @@ class StructuredOutput(PromptTechnique):
             f"Schema:\n{schema_repr}"
         )
         user_prompt = (
-            f"{case_input}\n\n"
-            "Respond strictly in valid JSON complying with the specified schema."
+            f"{case_input}\n\nRespond strictly in valid JSON complying with the specified schema."
         )
         return (system_addition, user_prompt)
 

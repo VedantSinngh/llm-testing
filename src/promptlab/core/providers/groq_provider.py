@@ -79,9 +79,7 @@ class GroqProvider(LLMProvider):
             return True
         return False
 
-    async def _execute_with_retry(
-        self, request: LLMRequest, messages: list[dict[str, str]]
-    ) -> Any:
+    async def _execute_with_retry(self, request: LLMRequest, messages: list[dict[str, str]]) -> Any:
         """Execute chat completion with bounded exponential retry for transient errors."""
         kwargs: dict[str, Any] = {
             "model": request.model,

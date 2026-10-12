@@ -140,7 +140,9 @@ if run_btn:
                 col_kpi1.metric("Latency", f"{resp.get('latency_ms', 0):.1f} ms")
                 col_kpi2.metric("Prompt Tokens", resp.get("prompt_tokens", 0))
                 col_kpi3.metric("Completion Tokens", resp.get("completion_tokens", 0))
-                col_kpi4.metric("Total Tokens", resp.get("prompt_tokens", 0) + resp.get("completion_tokens", 0))
+                col_kpi4.metric(
+                    "Total Tokens", resp.get("prompt_tokens", 0) + resp.get("completion_tokens", 0)
+                )
 
                 st.divider()
 

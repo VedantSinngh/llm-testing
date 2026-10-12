@@ -19,9 +19,7 @@ from promptlab.db.repositories import RunRepository, SafetyRepository, SuiteRepo
 async def test_suite_repository_crud(async_db_session: AsyncSession) -> None:
     """Verify SuiteRepository save, retrieve, update, list, and delete operations."""
     repo = SuiteRepository(async_db_session)
-    test_case = TestCase(
-        id="c1", input="Input 1", expected="Exp 1", scorer="exact_match"
-    )
+    test_case = TestCase(id="c1", input="Input 1", expected="Exp 1", scorer="exact_match")
     suite = TestSuite(
         name="crud_suite",
         description="Testing CRUD",

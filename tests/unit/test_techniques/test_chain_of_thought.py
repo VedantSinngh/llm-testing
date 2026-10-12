@@ -18,10 +18,7 @@ def test_chain_of_thought_prompt_application() -> None:
 def test_chain_of_thought_answer_extraction() -> None:
     """Verify extract_answer correctly isolates final token after delimiter."""
     sample_cot = (
-        "Let's think step by step:\n"
-        "1 car has 4 wheels.\n"
-        "3 cars have 3 * 4 = 12 wheels.\n"
-        "Answer: 12"
+        "Let's think step by step:\n1 car has 4 wheels.\n3 cars have 3 * 4 = 12 wheels.\nAnswer: 12"
     )
     answer = ChainOfThought.extract_answer(sample_cot)
     assert answer == "12"

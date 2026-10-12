@@ -8,7 +8,7 @@ never write SQL queries or interact with raw database cursors directly.
 from typing import Any
 import uuid
 
-from sqlalchemy import delete, func, select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -324,9 +324,7 @@ class SafetyRepository:
             "created_at": model.created_at,
         }
 
-    async def list(
-        self, offset: int = 0, limit: int = 50
-    ) -> tuple[list[dict[str, Any]], int]:
+    async def list(self, offset: int = 0, limit: int = 50) -> tuple[list[dict[str, Any]], int]:
         """List safety reports with pagination."""
         count_stmt = select(func.count(SafetyReportModel.id))
         total = (await self._session.execute(count_stmt)).scalar() or 0

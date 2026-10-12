@@ -267,7 +267,8 @@ In [src/promptlab/core/techniques/chain_of_thought.py](file:///c:/Users/vedaa/On
 1. **Prompt Injection:** `ChainOfThought.apply()` appends explicit reasoning instructions:
    ```python
    # System addition:
-   "Think step-by-step before answering. Break down the problem logically. "
+   "Think step-by-step before answering. Break down the problem logically."
+
    "Conclude your response strictly on the final line with the format: 'Answer: <your final answer>'."
    ```
 2. **Answer Parsing:** When the model generates:
@@ -379,8 +380,9 @@ In [src/promptlab/core/scorers/llm_judge.py:53-70](file:///c:/Users/vedaa/OneDri
        return ScoreResult(score=clamped_score, passed=passed, reason=data["reason"])
    except (json.JSONDecodeError, ValueError) as err:
        return ScoreResult(
-           score=0.0, passed=False,
-           reason=f"Failed to parse LLM Judge output as JSON: {err}. Raw output: {text[:100]}"
+           score=0.0,
+           passed=False,
+           reason=f"Failed to parse LLM Judge output as JSON: {err}. Raw output: {text[:100]}",
        )
    ```
    If the judge returns invalid JSON or hallucinated text, it fails gracefully with `score=0.0` and logs a preview of the raw output.
