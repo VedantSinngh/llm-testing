@@ -39,5 +39,5 @@ USER promptlab
 EXPOSE 8000
 EXPOSE 8501
 
-# Default command: launch the FastAPI backend
-CMD ["uvicorn", "promptlab.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Default command: launch the FastAPI backend (respecting $PORT if set by Render / cloud hosts)
+CMD ["sh", "-c", "uvicorn promptlab.api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

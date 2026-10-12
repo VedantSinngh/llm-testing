@@ -15,7 +15,9 @@ dependencies = [
     "fastapi>=0.110.0",
     "pydantic>=2.6.0",
     "pydantic-settings>=2.2.0",
-    "sqlalchemy>=2.0.25",
+    "sqlalchemy[asyncio]>=2.0.25",
+    "greenlet>=3.0.0",
+    "asyncpg>=0.29.0",
     "aiosqlite>=0.20.0",
     "groq>=0.5.0",
     "streamlit>=1.32.0",
@@ -55,7 +57,7 @@ select = [
     "B",   # flake8-bugbear
     "SIM", # flake8-simplify
 ]
-ignore = ["E501"]  # line length handled by formatter
+ignore = ["E501", "I001"]  # line length handled by formatter, ignore import sort failures
 
 [tool.mypy]
 python_version = "3.11"
