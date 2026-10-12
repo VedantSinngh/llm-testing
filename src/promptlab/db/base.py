@@ -35,6 +35,10 @@ def get_engine(database_url: str | None = None) -> AsyncEngine:
     global _engine
     if _engine is None:
         url = database_url or get_settings().database_url
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql+asyncpg://", 1)
+        elif url.startswith("postgresql://") and not url.startswith("postgresql+asyncpg://"):
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
         _engine = create_async_engine(url, echo=False, future=True)
     return _engine
 

@@ -144,13 +144,14 @@ class PIIDetector:
             )
 
         # 4. Phone Numbers (Indian and International)
+        phone_findings: list[dict[str, Any]] = []
         for pattern, detector_name in [
-            (self.INDIAN_PHONE_PATTERN, "pii_phone_indian"),
             (self.INTL_PHONE_PATTERN, "pii_phone_international"),
+            (self.INDIAN_PHONE_PATTERN, "pii_phone_indian"),
         ]:
             for match in pattern.finditer(text):
                 raw = match.group(0)
-                findings.append(
+                phone_findings.append(
                     {
                         "type": "phone",
                         "category": "PII",
@@ -160,6 +161,23 @@ class PIIDetector:
                         "end": match.end(),
                     }
                 )
+
+        # Deduplicate overlapping phone findings (prioritize longer/containing span)
+        ordered_phones = sorted(
+            phone_findings,
+            key=lambda m: (int(m["start"]), -(int(m["end"]) - int(m["start"]))),
+        )
+        selected_phones: list[dict[str, Any]] = []
+        for match_item in ordered_phones:
+            if any(
+                int(match_item["start"]) >= int(existing["start"])
+                and int(match_item["end"]) <= int(existing["end"])
+                for existing in selected_phones
+            ):
+                continue
+            selected_phones.append(match_item)
+
+        findings.extend(selected_phones)
 
         # 5. IPv4
         for match in self.IPV4_PATTERN.finditer(text):

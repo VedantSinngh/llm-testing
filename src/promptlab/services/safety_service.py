@@ -69,6 +69,11 @@ class SafetyService:
 
         report_id = await self._safety_repo.save(safety_report, model=model)
         suite_report["report_id"] = report_id
+        suite_report["tested_count"] = int(
+            suite_report.get("tested_count")
+            or suite_report.get("total_attacks")
+            or len(suite_report.get("results", []))
+        )
         return suite_report
 
     def scan_text(self, text: str) -> SafetyReport:

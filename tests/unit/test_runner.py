@@ -52,7 +52,7 @@ async def test_runner_fault_tolerance_per_case() -> None:
     assert bad_case.passed is False
     assert bad_case.score == 0.0
     assert bad_case.error is not None
-    assert "SCORER_NOT_FOUND" in str(bad_case.error) or "not registered" in str(bad_case.error)
+    assert "SCORER_NOT_FOUND" in bad_case.error or "not registered" in bad_case.error
 
     # Other cases must pass
     good_cases = [cr for cr in result.case_results if cr.case_id.startswith("good")]
@@ -66,6 +66,7 @@ async def test_runner_technique_application() -> None:
     """Verify that suite-level prompt technique is applied to inputs."""
     provider = MockProvider(simulated_latency_ms=0.0)
     provider.set_canned_response("answer: 4", "Correct! Answer: 4")
+    provider.set_canned_response("answer:", "Correct! Answer: 4")
 
     cases = [
         TestCase(id="cot_1", input="Calculate 2*2", expected="Answer: 4", scorer="contains"),

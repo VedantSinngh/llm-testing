@@ -48,6 +48,10 @@ class MockProvider(LLMProvider):
         for keyword, response in self._canned_responses.items():
             if keyword in lower_prompt:
                 return response
+            if keyword.startswith("answer:") and (
+                "answer:" in lower_prompt or "step by step" in lower_prompt
+            ):
+                return response
 
         if "sentiment" in lower_prompt:
             return '{"sentiment": "positive", "confidence": 0.98}'
